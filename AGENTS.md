@@ -24,6 +24,11 @@ Agents work autonomously and the maintainer reviews pull requests. Don't stop to
 - When a PR gets review comments, fix them on the same branch (skill `address-review`).
 - Ask only when blocked on a decision that is genuinely the maintainer's, such as a design choice the spec doesn't settle.
 
+### Commits
+
+- Short imperative subject line, with a body when the why isn't obvious.
+- Don't add a `Claude-Session:` trailer or any other session link to commits or PR descriptions.
+
 ### PR descriptions
 
 - What changed and why, in a few lines.

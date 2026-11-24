@@ -1,0 +1,10 @@
+name = "Tutti"
+version = "0.1.0"
+defaultTargets = ["tutti"]
+
+[[lean_lib]]
+name = "Tutti"
+
+[[lean_exe]]
+name = "tutti"
+root = "Main"

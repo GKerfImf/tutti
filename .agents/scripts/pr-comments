@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# pr-comments <n> [--all]: print the review feedback on PR <n>.
+# Inline comments come with file and line range; by default, threads whose last
+# message is a reply starting with "Done" are hidden (pass --all to show them).
+# Note: replies posted by agents use the maintainer's account, so authorship can't
+# tell them apart; the "Done" prefix is the convention that marks a handled thread.
+source "$(dirname "$0")/_lib.sh"
+[ $# -ge 1 ] || die "usage: pr-comments <n> [--all]"
+n="$1"; all="${2:-}"
+r="$(repo)"
+
+echo "== PR #$n: $(ghq pr view "$n" --json title,headRefName --jq '"\(.title)  [branch \(.headRefName)]"')"
+
+echo "== review bodies and top-level comments"
+ghq pr view "$n" --json reviews,comments --jq '
+  ([.reviews[] | select(.body != "") | "[review \(.state)] \(.author.login): \(.body)"]
+   + [.comments[] | "[comment] \(.author.login): \(.body)"]) | .[]' || true
+
+echo "== inline threads"
+gh api "repos/$r/pulls/$n/comments" --paginate 2>/dev/null | jq -r --arg all "$all" '
+  group_by(.in_reply_to_id // .id)
+  | map(sort_by(.created_at))
+  | map(select($all == "--all" or (last.in_reply_to_id == null) or (last.body | test("^Done") | not)))
+  | .[]
+  | (first) as $root
+  | "--- thread \($root.id)  \($root.path):\(if $root.start_line then "\($root.start_line)-" else "" end)\($root.line // $root.original_line)\(if $root.line == null then "  (outdated)" else "" end)",
+    (.[] | "  \(.user.login): \(.body | gsub("\n"; "\n    "))")'

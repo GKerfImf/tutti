@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# new-branch <name>: start a task branch from an up-to-date origin/main.
+source "$(dirname "$0")/_lib.sh"
+[ $# -eq 1 ] || die "usage: new-branch <name>"
+[ -z "$(git status --porcelain)" ] || die "working tree not clean; commit or stash first"
+git fetch -q origin
+git switch -q -c "$1" origin/main
+echo "on $1 (from origin/main $(git rev-parse --short origin/main))"

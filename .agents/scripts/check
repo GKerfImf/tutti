@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# check: lake build, then list soundness escapes this branch adds relative to origin/main.
+# Exits non-zero if the build fails. Escapes are reported, not fatal; list them in the PR.
+source "$(dirname "$0")/_lib.sh"
+
+log="$(mktemp)"
+if ! lake build >"$log" 2>&1; then
+  grep -E 'error|✖' "$log" | head -40
+  die "lake build failed (full log: $log)"
+fi
+tail -1 "$log"
+grep -E "declaration uses 'sorry'|declaration uses \`sorry\`" "$log" || true
+
+git fetch -q origin main 2>/dev/null || true
+added="$(git diff origin/main -- '*.lean' \
+  | grep -nE '^\+.*\b(sorry|axiom|native_decide|implemented_by|extern)\b' || true)"
+if [ -n "$added" ]; then
+  echo "soundness escapes added on this branch (list them in the PR description):"
+  echo "$added"
+else
+  echo "no new soundness escapes"
+fi

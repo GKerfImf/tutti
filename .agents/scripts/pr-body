@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# pr-body <n> [file]: without a file, print PR <n>'s description; with one, replace it.
+# Typical edit: pr-body 5 > /tmp/b.md; edit /tmp/b.md; pr-body 5 /tmp/b.md
+source "$(dirname "$0")/_lib.sh"
+[ $# -ge 1 ] || die "usage: pr-body <n> [file]"
+if [ $# -eq 1 ]; then
+  ghq pr view "$1" --json body --jq .body
+else
+  [ -f "$2" ] || die "no such file: $2"
+  grep -q '\\`' "$2" && die "body contains \\\` (escaped backtick); fix the file"
+  ghq pr edit "$1" --body-file "$2" >/dev/null
+  echo "updated description of #$1"
+fi

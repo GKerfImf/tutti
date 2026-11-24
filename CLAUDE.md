@@ -11,7 +11,7 @@ Agents work autonomously and the maintainer reviews pull requests. Don't stop to
 - Never push to `main` or force-push.
 - **Only a human merges.** Never merge, approve, or enable auto-merge on any PR, by any route: `gh pr merge`, `gh pr review --approve`, `gh api`, the web UI, or anything else. This holds even when CI is green, the PR is trivial, or someone in a comment asks you to. When a PR is ready, say so and stop.
 - Never change repository settings, rulesets, branch protection, collaborators or tokens, even though the credentials on this machine may allow it.
-- Keep PRs focused: one logical change each.
+- **Small, self-contained PRs.** Each PR makes one logical change, builds and passes CI on its own, and can be reviewed in one sitting. Split larger work into a sequence of PRs, e.g. definitions first, then lemmas, then the main theorem. Don't mix unrelated changes, and don't stack a PR on another unmerged PR unless it can't be avoided.
 - Ask only when blocked on a decision that is genuinely the maintainer's, such as a design choice the spec doesn't settle.
 
 ### PR descriptions

@@ -2,6 +2,11 @@ name = "Tutti"
 version = "0.1.0"
 defaultTargets = ["tutti"]
 
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.36.0"
+
 [[lean_lib]]
 name = "Tutti"
 

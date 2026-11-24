@@ -1,7 +1,5 @@
 # Design: the CRDT model and what we prove
 
-Status: **agreed design** (see §5 for the decisions). Nothing here is in Lean yet. The definitions and statements below turn into Lean one small PR at a time.
-
 ## 1. Choice of algorithm: Fugue, then FugueMax
 
 We formalize **Fugue** and **FugueMax**, from Weidner & Kleppmann, ["The Art of the Fugue: Minimizing Interleaving in Collaborative Text Editing"](https://arxiv.org/abs/2305.00583) (IEEE TPDS 2025; section and theorem numbers below refer to arXiv v3).

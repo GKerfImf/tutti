@@ -46,7 +46,7 @@ lake exe tutti    # run the executable
 
 ## Lean conventions
 
-- Lean 4, toolchain pinned in `lean-toolchain`. No Mathlib unless a PR adds it deliberately.
+- Lean 4, toolchain pinned in `lean-toolchain`. Mathlib is a dependency, with its tag matching the toolchain. After `lake update`, run `lake exe cache get` instead of building Mathlib from source.
 - Write Lean 4 syntax, not Lean 3 or Mathlib-3 (`fun x => ..`, `induction n with | zero => .. | succ k ih => ..`).
 - `Nat.add` recurses on the second argument: `n + 0 = n` holds by `rfl`, `0 + n = n` doesn't.
 - Prefer `simp only [...]` over a bare `simp` in finished proofs (use `simp?` to get the lemma list).

@@ -1,6 +1,6 @@
 # Design: the CRDT model and what we prove
 
-Status: **proposal for review.** Nothing here is in Lean yet. Once this is agreed, the definitions and statements below turn into Lean, one small PR at a time.
+Status: **agreed design** (see §5 for the decisions). Nothing here is in Lean yet. The definitions and statements below turn into Lean one small PR at a time.
 
 ## 1. Choice of algorithm: Fugue, then FugueMax
 
@@ -96,8 +96,10 @@ Each item is one or a few small PRs.
 5. FugueMax: right origins, the new sibling order, and T1–T3 again (mostly reusing step 4).
 6. T4.
 
-## 5. Open questions for the maintainer
+## 5. Decisions
 
-1. **Mathlib or not?** Finite sets, order lemmas and `List` lemmas from Mathlib would shorten the proofs a lot, at the price of a heavy dependency and slower CI. **Recommendation:** add it before step 1.
-2. **Fugue first, then FugueMax**, or go straight to FugueMax? **Recommendation:** Fugue first. The extra step is cheap and gives an early milestone.
-3. **Generic `α`, or `Char` only?** **Recommendation:** generic. It costs nothing in the proofs.
+Settled with the maintainer:
+
+1. **Use Mathlib.** It's added before step 1, for finite sets and its order and `List` lemmas. The cost is a heavy dependency and slower CI.
+2. **Fugue first, then FugueMax.** The extra step is cheap and gives an early milestone.
+3. **Generic element type `α`**, not `Char` only. It costs nothing in the proofs.

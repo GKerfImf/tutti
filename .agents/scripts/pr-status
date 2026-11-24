@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# pr-status: one line per open PR, with CI state and the number of unhandled inline threads.
+source "$(dirname "$0")/_lib.sh"
+r="$(repo)"
+ghq pr list --state open --json number,title,headRefName,statusCheckRollup --jq '.[] |
+  "\(.number)\t\(.headRefName)\t\(
+    [.statusCheckRollup[]? | .conclusion // .status] as $c
+    | if ($c|length)==0 then "no checks"
+      elif any($c[]; .=="FAILURE") then "CI failing"
+      elif all($c[]; .=="SUCCESS") then "CI green"
+      else "CI running" end)\t\(.title)"' |
+while IFS=$'\t' read -r n branch ci title; do
+  open="$(gh api "repos/$r/pulls/$n/comments" --paginate 2>/dev/null | jq '
+    group_by(.in_reply_to_id // .id) | map(sort_by(.created_at))
+    | map(select((last.in_reply_to_id == null) or (last.body | test("^Done") | not))) | length')"
+  printf '#%s  %-12s  %-16s  %s open threads  %s\n' "$n" "$ci" "$branch" "$open" "$title"
+done

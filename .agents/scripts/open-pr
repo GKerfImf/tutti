@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# open-pr <title> <body-file>: open a PR from the current branch into main; prints its URL.
+# Write the body to a file first, so no shell escaping ends up in the description.
+source "$(dirname "$0")/_lib.sh"
+[ $# -eq 2 ] || die "usage: open-pr <title> <body-file>"
+[ -f "$2" ] || die "no such file: $2"
+grep -q '\\`' "$2" && die "body contains \\\` (escaped backtick); fix the file"
+branch="$(git rev-parse --abbrev-ref HEAD)"
+ghq pr create --base main --head "$branch" --title "$1" --body-file "$2" \
+  | grep -E '/pull/[0-9]+$'

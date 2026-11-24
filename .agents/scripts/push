@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# push [--force]: push the current branch to origin, setting upstream. Refuses main.
+# --force uses --force-with-lease (for your own PR branch after a rebase).
+source "$(dirname "$0")/_lib.sh"
+branch="$(git rev-parse --abbrev-ref HEAD)"
+[ "$branch" != "main" ] || die "refusing to push main; work on a branch"
+args=(-q -u origin "$branch")
+[ "${1:-}" = "--force" ] && args=(--force-with-lease "${args[@]}")
+git push "${args[@]}" 2>&1 | grep -v '^remote:' || true
+[ "$(git rev-parse HEAD)" = "$(git rev-parse "origin/$branch")" ] || die "push did not land"
+echo "pushed $branch @ $(git rev-parse --short HEAD)"

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# reply <n> <comment-id> <text>: reply in the thread of inline comment <comment-id> on PR <n>.
+# Start the text with "Done:" when the thread is handled; pr-comments hides those threads.
+source "$(dirname "$0")/_lib.sh"
+[ $# -eq 3 ] || die "usage: reply <n> <comment-id> <text>"
+r="$(repo)"
+id="$(gh api "repos/$r/pulls/$1/comments/$2/replies" -f body="$3" --jq .id 2>/dev/null)" \
+  || die "reply failed"
+echo "replied to $2 (reply $id)"

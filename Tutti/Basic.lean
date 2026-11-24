@@ -10,4 +10,4 @@ theorem add_comm : ∀ (n m : Nat), n + m = m + n := by
   intro n
   induction n with
   | zero => apply add0n
-  | succ k ih => _
+  | succ k ih => sorry

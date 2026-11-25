@@ -2,7 +2,7 @@
 
 A verified collaborative-text CRDT in [Lean 4](https://lean-lang.org/), served as a gRPC microservice.
 
-> **This project is 100% vibecoded.** All code and proofs are written by AI agents (Claude Code). A human reviews and merges every pull request, but writes none of it. See [How this project is built](#how-this-project-is-built).
+> **This project is 100% vibecoded.** All code and proofs are written by AI agents (Claude Code). A human reviews and merges every pull request, but writes none of it.
 
 ## What it's for
 
@@ -12,9 +12,3 @@ Tutti aims to:
 2. **Ship it as a real service:** a sync server for collaborative documents, speaking gRPC. Clients submit and fetch operations and subscribe to updates.
 3. **Connect the proofs to the running system:** the service's handlers are proved to refine the model, and checks at the boundaries (storage, network) fail stop instead of silently breaking the guarantees.
 4. **Be useful beyond this repo:** serve as a verified reference for testing other CRDT implementations.
-
-## How this project is built
-
-- AI agents write everything: Lean definitions, theorem statements, proofs, the Rust sidecar, CI.
-- Each task arrives as a pull request. The maintainer reviews it and merges it; agents never merge their own work.
-- The rules agents follow live in [`AGENTS.md`](AGENTS.md).
